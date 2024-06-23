@@ -7,7 +7,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\StockDataMail;
+use App\Mail\CompanyDataMail;
 
 
 class CampanyFeatureTest extends TestCase
@@ -36,7 +36,7 @@ class CampanyFeatureTest extends TestCase
 
         $response->assertStatus(200);
 
-        Mail::assertSent(StockDataMail::class, function ($mail) {
+        Mail::assertSent(CompanyDataMail::class, function ($mail) {
             return $mail->hasTo('user@example.com') &&
                    $mail->companyName === 'Apple Inc.' &&
                    $mail->startDate === '2024-05-01' &&

@@ -6,7 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Services\CompanyService;
 use App\Rules\ValidSymbol;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Classes\ApiResponseClass AS ResponseClass;
+use App\Jobs\GenerateCompanyReport;
 
+/**
+ * @OA\Info(title="XM PHP", version="0.1")
+ */
 class CompanyController extends Controller
 {
     protected $companyService;
@@ -18,7 +24,7 @@ class CompanyController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/stock/historical-data",
+     *     path="/api/get-company",
      *     summary="Get historical stock data",
      *     @OA\RequestBody(
      *         required=true,
@@ -43,7 +49,11 @@ class CompanyController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validation error', 'errors' => $validator->errors()], 422);
+            throw new HttpResponseException(response()->json([
+                'success'   => false,
+                'message'   => 'Validation errors',
+                'data'      => $validator->errors()
+            ]));
         }
 
         $companySymbol = $request->input('company_symbol');
@@ -53,16 +63,10 @@ class CompanyController extends Controller
 
          // Get company name from the validation rule data
         $companyName = collect(json_decode(file_get_contents('https://pkgstore.datahub.io/core/nasdaq-listings/nasdaq-listed_json/data/a5bc7580d6176d60ac0b2142ca8d7df6/nasdaq-listed_json.json'), true))
-            ->firstWhere('Symbol', $companySymbol)['Company Name'];
+        ->firstWhere('Symbol', $companySymbol)['Company Name'];
 
-        $filteredData = $this->companyService->fetchHistoricalData($companySymbol, $startDate, $endDate);
+        GenerateCompanyReport::dispatch($this->companyService, $email, $companySymbol, $startDate, $endDate, $companyName);        
 
-        if(!is_array($filteredData)) {
-            return response()->json(['message' => $filteredData]);
-        }
-
-        $this->companyService->sendHistoricalDataEmail($company['Company Name'], $startDate, $endDate, $email, $filteredData);
-
-        return response()->json(['message' => 'Historical data sent to email']);
+        return ResponseClass::sendResponse('Request Submitted, you will get report on your email!','Request Submitted, you will get report on your email!');
     }
 }
