@@ -51,7 +51,15 @@ Once the containers are started, you can access the project in your web browser 
 To stop the containers, you can simply press `Ctrl + C` or run:
 
 ```bash
+./vendor/bin/sail artisan migrate
 ./vendor/bin/sail down
+```
+
+### This application is using Laravel Queue to Fetch Company Details from finance API and then send required data to provided Email
+To make queu work, please change `QUEUE_CONNECTION` from `database` to `redis`
+# With docker run below command to make queue work
+```bash
+./vendor/bin/sail artisan queue:work
 ```
 
 ## Email Testing with Mailpit
