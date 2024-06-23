@@ -66,3 +66,16 @@ Once the project is up and running, you can access the Mailpit web interface to 
 http://localhost:8025/
 ```
 By using Mailpit, we can easily inspect the emails, verify their content, and ensure that our application's email features are functioning as expected without any side effects.
+
+## Testing
+
+This project uses [PHPUnit](https://phpunit.de) for testing.
+
+### Running Tests
+
+To run the suite of tests for the application, execute the following command:
+
+```bash
+./vendor/bin/phpunit
+```
+This command will trigger Pest to run all tests and display a summary of passed and failed tests, if any.
