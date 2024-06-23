@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CompanyDataMail;
+use App\Mail\CompanyFailureMail;
 
 class CompanyService
 {
@@ -47,5 +48,10 @@ class CompanyService
         file_put_contents($filePath, $csvData);
 
         Mail::to($email)->send(new CompanyDataMail($companyName, $startDate, $endDate, $filePath));
+    }
+
+    public function sendFailureEmail($companyName, $startDate, $endDate, $email): void
+    {
+        Mail::to($email)->send(new CompanyFailureMail($companyName, $startDate, $endDate));
     }
 }

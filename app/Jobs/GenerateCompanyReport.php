@@ -22,7 +22,7 @@ class GenerateCompanyReport implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct($companyService, String $email, $companySymbol, $startDate, $endDate, $companyName)
+    public function __construct($companyService, String $email, String $companySymbol, String $startDate, String $endDate, String $companyName)
     {
         $this->companyService = $companyService;
         $this->email = $email;
@@ -40,9 +40,9 @@ class GenerateCompanyReport implements ShouldQueue
         $filteredData = $this->companyService->fetchHistoricalData($this->companySymbol, $this->startDate, $this->endDate);
 
         if(is_array($filteredData)) {
-            $this->companyService->sendHistoricalDataEmail($this->company, $this->startDate, $this->endDate, $this->email, $filteredData);
+            $this->companyService->sendHistoricalDataEmail($this->companyName, $this->startDate, $this->endDate, $this->email, $filteredData);
         } else {
-
+            $this->companyService->sendFailureEmail($this->companyName, $this->startDate, $this->endDate, $this->email);
         }
     }
 }
