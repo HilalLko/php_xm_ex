@@ -10,8 +10,8 @@ http://127.0.0.1:4545/api/documentation
 Start by cloning the repository to your local machine:
 
 ```bash
-git clone https://github.com/sam0hack/xm.git 
-cd xm
+git clone https://github.com/HilalLko/php_xm_ex.git 
+cd php_xm_ex
 ```
 
 ### 2. Install PHP Dependencies
@@ -86,4 +86,4 @@ To run the suite of tests for the application, execute the following command:
 ```bash
 ./vendor/bin/phpunit
 ```
-This command will trigger Pest to run all tests and display a summary of passed and failed tests, if any.
+This command will run all tests and display a summary of passed and failed tests, if any.
